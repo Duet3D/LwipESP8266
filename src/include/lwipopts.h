@@ -38,6 +38,10 @@
 #ifndef __LWIPOPTS_H__
 #define __LWIPOPTS_H__
 
+#if 1	// dc42 changes
+#define TCP_LISTEN_BACKLOG              1
+#endif
+
 #define PBUF_RSV_FOR_WLAN
 #define EBUF_LWIP
 

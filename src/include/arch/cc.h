@@ -85,6 +85,13 @@ typedef unsigned long   mem_ptr_t;
 #define PACK_STRUCT_BEGIN
 #define PACK_STRUCT_END
 
+#ifdef ESP8266	//dc42
+
+#define LWIP_PLATFORM_DIAG(_x) ets_printf _x
+#define LWIP_PLATFORM_ASSERT(_msg) ets_printf("%s\n", _msg)
+
+#else
+
 #define LWIP_DEBUG
 
 #ifdef LWIP_DEBUG
@@ -95,6 +102,8 @@ typedef unsigned long   mem_ptr_t;
 #define LWIP_PLATFORM_DIAG(x)
 #define LWIP_PLATFORM_ASSERT(x)
 #endif
+
+#endif	//dc42
 
 #define SYS_ARCH_DECL_PROTECT(x)
 #define SYS_ARCH_PROTECT(x)
