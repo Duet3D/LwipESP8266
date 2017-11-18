@@ -457,8 +457,10 @@ tcp_write(struct tcp_pcb *pcb, const void *arg, u16_t len, u8_t apiflags)
       oversize -= oversize_used;
       space -= oversize_used;
     }
+#if 0	// DC patch: the following assertion is not true when space < oversize && space < len because of the previous patch
     /* now we are either finished or oversize is zero */
     LWIP_ASSERT("inconsistend oversize vs. len", (oversize == 0) || (pos == len));
+#endif
 #endif /* TCP_OVERSIZE */
 
     /*
