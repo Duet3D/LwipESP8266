@@ -61,6 +61,15 @@
 /** flag for LWIP_DEBUGF to halt after printing this debug message */
 #define LWIP_DBG_HALT          0x08U
 
+#if 1	//dc42 debugging improvements
+
+#define LWIP_ASSERT(message, assertion) do { if(!(assertion)) { \
+  LWIP_PLATFORM_ASSERT_NEW(__FILE__, __LINE__, message); } } while(0)
+#define LWIP_ERROR(message, expression, handler) do { if (!(expression)) { \
+  LWIP_PLATFORM_ASSERT_NEW(__FILE__, __LINE__, message); handler;}} while(0)
+
+#else
+
 #ifndef LWIP_NOASSERT
 #define LWIP_ASSERT(message, assertion) do { if(!(assertion)) \
 	{ LWIP_PLATFORM_ASSERT(message); } } while(0)
@@ -73,6 +82,8 @@
 #define LWIP_ERROR(message, expression, handler) do { if (!(expression)) { \
   LWIP_PLATFORM_ASSERT(message); handler;}} while(0)
 #endif /* LWIP_ERROR */
+
+#endif
 
 #ifdef LWIP_DEBUG
 /** print debug message only if debug message type is enabled...

@@ -85,10 +85,10 @@ typedef unsigned long   mem_ptr_t;
 #define PACK_STRUCT_BEGIN
 #define PACK_STRUCT_END
 
-#ifdef ESP8266	//dc42
+#if 1	//dc42 improved debug messages
 
 #define LWIP_PLATFORM_DIAG(_x) ets_printf _x
-#define LWIP_PLATFORM_ASSERT(_msg) ets_printf("%s\n", _msg)
+#define LWIP_PLATFORM_ASSERT_NEW(_file, _line, _msg) ets_printf("lwip: %s(%d) %s\n", _file, _line, _msg)
 
 #else
 
