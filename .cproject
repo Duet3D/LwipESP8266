@@ -3,6 +3,9 @@
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="cdt.managedbuild.config.gnu.cross.lib.debug.1879991480">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.cross.lib.debug.1879991480" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<macros>
+					<stringMacro name="GccPath" type="VALUE_TEXT" value="/home/christian/.arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/1.20.0-26-gb404fb9-2/bin"/>
+				</macros>
 				<externalSettings>
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/LwipESP8266"/>
@@ -22,8 +25,8 @@
 				<configuration artifactExtension="a" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.cross.lib.debug.1879991480" name="Debug" parent="cdt.managedbuild.config.gnu.cross.lib.debug">
 					<folderInfo id="cdt.managedbuild.config.gnu.cross.lib.debug.1879991480." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.cross.lib.debug.1187353002" name="Cross GCC" superClass="cdt.managedbuild.toolchain.gnu.cross.lib.debug">
-							<option id="cdt.managedbuild.option.gnu.cross.prefix.1988036056" name="Prefix" superClass="cdt.managedbuild.option.gnu.cross.prefix" value="xtensa-lx106-elf-" valueType="string"/>
-							<option id="cdt.managedbuild.option.gnu.cross.path.34897824" name="Path" superClass="cdt.managedbuild.option.gnu.cross.path" value="C:\Users\David\AppData\Local\Arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\bin" valueType="string"/>
+							<option id="cdt.managedbuild.option.gnu.cross.prefix.1988036056" name="Prefix" superClass="cdt.managedbuild.option.gnu.cross.prefix" useByScannerDiscovery="false" value="xtensa-lx106-elf-" valueType="string"/>
+							<option id="cdt.managedbuild.option.gnu.cross.path.34897824" name="Path" superClass="cdt.managedbuild.option.gnu.cross.path" useByScannerDiscovery="false" value="${GccPath}" valueType="string"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.71174929" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
 							<builder buildPath="${workspace_loc:/LwipESP8266}/Debug" id="cdt.managedbuild.builder.gnu.cross.1917885105" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.compiler.1506750624" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
@@ -37,9 +40,12 @@
 									<listOptionValue builtIn="false" value="F_CPU=80000000L"/>
 									<listOptionValue builtIn="false" value="ESP8266"/>
 									<listOptionValue builtIn="false" value="LWIP_OPEN_SRC"/>
+									<listOptionValue builtIn="false" value="LWIP_BUILD"/>
+									<listOptionValue builtIn="false" value="USE_OPTIMIZE_PRINTF"/>
 								</option>
 								<option id="gnu.c.compiler.option.misc.other.387444828" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -Wpointer-arith -Wno-implicit-function-declaration -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -falign-functions=4 -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="gnu.c.compiler.option.include.paths.338388895" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/src/glue}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CoreESP8266/sdk/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CoreESP8266/cores/esp8266}&quot;"/>
@@ -58,12 +64,41 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="cdt.managedbuild.config.gnu.cross.lib.debug.1879991480.2038057818" name="/" resourcePath="src/src/glue-esp">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.cross.lib.debug.1963964343" name="Cross GCC" superClass="cdt.managedbuild.toolchain.gnu.cross.lib.debug" unusedChildren="">
+							<option id="cdt.managedbuild.option.gnu.cross.prefix.1988036056.1119052118" name="Prefix" superClass="cdt.managedbuild.option.gnu.cross.prefix.1988036056"/>
+							<option id="cdt.managedbuild.option.gnu.cross.path.34897824.1824996921" name="Path" superClass="cdt.managedbuild.option.gnu.cross.path.34897824"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
+							<tool command="gcc" id="cdt.managedbuild.tool.gnu.cross.c.compiler.643305177" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler.1506750624">
+								<option id="gnu.c.compiler.option.include.paths.293514226" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/src/glue}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/src/lwip/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CoreESP8266/sdk/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CoreESP8266/cores/esp8266}&quot;"/>
+								</option>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1918638622" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.1684995318" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler.1306866394"/>
+							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.1990239132" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker.1706586120"/>
+							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.953968396" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker.1513929095"/>
+							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.1480214173" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver.1259904197"/>
+							<tool id="cdt.managedbuild.tool.gnu.cross.assembler.1250261314" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler.354873720">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.6150725" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="src/src/lwip/src|src/src/lwip2/src/apps/tftp|src/src/lwip2/src/apps/snmp|src/src/lwip2/src/apps/mqtt|src/src/lwip2/src/apps/lwiperf|src/src/lwip2/src/apps/httpd|src/src/lwip2/src/netif/ppp|src/src/lwip2/test|src/src/lwip2/doc|src/lwip2-src/src/apps/tftp|src/lwip2-src/src/apps/snmp|src/lwip2-src/src/apps/mqtt|src/lwip2-src/src/apps/lwiperf|src/lwip2-src/src/apps/httpd|src/lwip2-src/src/netif/ppp|src/lwip2-src/doc|src/lwip2-src/test|src/src/apps/tftp|src/src/apps/sntp|src/src/apps/snmp|src/src/apps/mqtt|src/src/apps/lwiperf|src/src/apps/httpd|src/src/netif/ppp|src/doc|src/test|src/lwip2/src/src/netif/ppp|src/lwip2/src/doc|src/lwip2/src/test|src/src/src/apps/tftp|src/src/src/apps/sntp|src/src/src/apps/snmp|src/src/src/apps/mqtt|src/src/src/apps/lwiperf|src/src/src/apps/httpd|src/src/doc|src/src/test" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 		</cconfiguration>
 		<cconfiguration id="cdt.managedbuild.config.gnu.cross.lib.release.869616823">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.cross.lib.release.869616823" moduleId="org.eclipse.cdt.core.settings" name="Release">
+				<macros>
+					<stringMacro name="GccPath" type="VALUE_TEXT" value="/home/christian/.arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/1.20.0-26-gb404fb9-2/bin"/>
+				</macros>
 				<externalSettings>
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/LwipESP8266"/>
@@ -83,8 +118,8 @@
 				<configuration artifactExtension="a" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.cross.lib.release.869616823" name="Release" parent="cdt.managedbuild.config.gnu.cross.lib.release">
 					<folderInfo id="cdt.managedbuild.config.gnu.cross.lib.release.869616823." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.cross.lib.release.584851512" name="Cross GCC" superClass="cdt.managedbuild.toolchain.gnu.cross.lib.release">
-							<option id="cdt.managedbuild.option.gnu.cross.prefix.171191593" name="Prefix" superClass="cdt.managedbuild.option.gnu.cross.prefix" value="xtensa-lx106-elf-" valueType="string"/>
-							<option id="cdt.managedbuild.option.gnu.cross.path.720039848" name="Path" superClass="cdt.managedbuild.option.gnu.cross.path" value="C:\Users\David\AppData\Local\Arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\bin" valueType="string"/>
+							<option id="cdt.managedbuild.option.gnu.cross.prefix.171191593" name="Prefix" superClass="cdt.managedbuild.option.gnu.cross.prefix" useByScannerDiscovery="false" value="xtensa-lx106-elf-" valueType="string"/>
+							<option id="cdt.managedbuild.option.gnu.cross.path.720039848" name="Path" superClass="cdt.managedbuild.option.gnu.cross.path" useByScannerDiscovery="false" value="${GccPath}" valueType="string"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.1236368029" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
 							<builder buildPath="${workspace_loc:/LwipESP8266}/Release" id="cdt.managedbuild.builder.gnu.cross.1796583671" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.compiler.1404122324" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
@@ -97,13 +132,17 @@
 									<listOptionValue builtIn="false" value="F_CPU=80000000L"/>
 									<listOptionValue builtIn="false" value="ESP8266"/>
 									<listOptionValue builtIn="false" value="LWIP_OPEN_SRC"/>
+									<listOptionValue builtIn="false" value="LWIP_BUILD"/>
+									<listOptionValue builtIn="false" value="USE_OPTIMIZE_PRINTF"/>
 								</option>
 								<option id="gnu.c.compiler.option.misc.other.434747991" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -Wpointer-arith -Wno-implicit-function-declaration -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -falign-functions=4 -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="gnu.c.compiler.option.include.paths.553205915" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/src/glue}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CoreESP8266/sdk/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CoreESP8266/cores/esp8266}&quot;"/>
 								</option>
+								<option id="gnu.c.compiler.option.dialect.std.1838562602" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1220970287" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.151944540" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
@@ -118,6 +157,32 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="cdt.managedbuild.config.gnu.cross.lib.release.869616823.1599223557" name="/" resourcePath="src/src/glue-esp">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.cross.lib.release.367835171" name="Cross GCC" superClass="cdt.managedbuild.toolchain.gnu.cross.lib.release" unusedChildren="">
+							<option id="cdt.managedbuild.option.gnu.cross.prefix.171191593.1566713140" name="Prefix" superClass="cdt.managedbuild.option.gnu.cross.prefix.171191593"/>
+							<option id="cdt.managedbuild.option.gnu.cross.path.720039848.725851732" name="Path" superClass="cdt.managedbuild.option.gnu.cross.path.720039848"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
+							<tool command="xtensa-lx106-elf-gcc" id="cdt.managedbuild.tool.gnu.cross.c.compiler.1680474565" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler.1404122324">
+								<option id="gnu.c.compiler.option.include.paths.292807143" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/src/glue}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/src/lwip/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CoreESP8266/sdk/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CoreESP8266/cores/esp8266}&quot;"/>
+								</option>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.700199211" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.178717759" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler.151944540"/>
+							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.457973328" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker.837049025"/>
+							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.1897197143" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker.930434263"/>
+							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.934166629" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver.853661516"/>
+							<tool id="cdt.managedbuild.tool.gnu.cross.assembler.812353079" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler.308831716">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.429245415" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="src/src/lwip/src|src/src/lwip2/src/apps/tftp|src/src/lwip2/src/apps/snmp|src/src/lwip2/src/apps/mqtt|src/src/lwip2/src/apps/lwiperf|src/src/lwip2/src/apps/httpd|src/src/lwip2/src/netif/ppp|src/src/lwip2/test|src/src/lwip2/doc|src/lwip2-src/src/apps/tftp|src/lwip2-src/src/apps/snmp|src/lwip2-src/src/apps/mqtt|src/lwip2-src/src/apps/lwiperf|src/lwip2-src/src/apps/httpd|src/lwip2-src/src/netif/ppp|src/lwip2-src/doc|src/lwip2-src/test|src/src/apps/tftp|src/src/apps/sntp|src/src/apps/snmp|src/src/apps/mqtt|src/src/apps/lwiperf|src/src/apps/httpd|src/src/netif/ppp|src/doc|src/test|src/lwip2/src/src/netif/ppp|src/lwip2/src/doc|src/lwip2/src/test|src/src/src/apps/tftp|src/src/src/apps/sntp|src/src/src/apps/snmp|src/src/src/apps/mqtt|src/src/src/apps/lwiperf|src/src/src/apps/httpd|src/src/doc|src/src/test" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -136,6 +201,14 @@
 		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/LwipESP8266"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/LwipESP8266"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

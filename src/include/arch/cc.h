@@ -1,139 +1,144 @@
-/*
- * Copyright (c) 2001, Swedish Institute of Computer Science.
- * All rights reserved. 
- *
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions 
- * are met: 
- * 1. Redistributions of source code must retain the above copyright 
- *    notice, this list of conditions and the following disclaimer. 
- * 2. Redistributions in binary form must reproduce the above copyright 
- *    notice, this list of conditions and the following disclaimer in the 
- *    documentation and/or other materials provided with the distribution. 
- * 3. Neither the name of the Institute nor the names of its contributors 
- *    may be used to endorse or promote products derived from this software 
- *    without specific prior written permission. 
- *
- * THIS SOFTWARE IS PROVIDED BY THE INSTITUTE AND CONTRIBUTORS ``AS IS'' AND 
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE INSTITUTE OR CONTRIBUTORS BE LIABLE 
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS 
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY 
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
- * SUCH DAMAGE. 
- *
- * This file is part of the lwIP TCP/IP stack.
- * 
- * Author: Adam Dunkels <adam@sics.se>
- *
- */
-#ifndef __ARCH_CC_H__
-#define __ARCH_CC_H__
 
-//#include <string.h>
-#include "c_types.h"
+/*
+
+Redistribution and use in source and binary forms, with or without modification, 
+are permitted provided that the following conditions are met: 
+
+1. Redistributions of source code must retain the above copyright notice, 
+this list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice, 
+this list of conditions and the following disclaimer in the documentation 
+and/or other materials provided with the distribution. 
+3. The name of the author may not be used to endorse or promote products 
+derived from this software without specific prior written permission. 
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS AND ANY EXPRESS OR IMPLIED 
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT 
+SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT 
+OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING 
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+OF SUCH DAMAGE.
+
+author: d. gauchard
+
+*/
+
+// version for esp8266 sdk-2.0.0(656edbf) and later
+
+#ifndef LWIP2_ARCH_CC_H
+#define LWIP2_ARCH_CC_H
+
+#include "stdint.h"
+#include "lwip-err-t.h"
+
+#ifdef LWIP_BUILD
+
+// define LWIP_BUILD only when building LWIP
+// otherwise include files below would conflict
+// with standard headers like atoi()
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include "ets_sys.h"
 #include "osapi.h"
-#define EFAULT 14
+#include "esp-missing.h"
 
-//#undef ICACHE_FLASH_ATTR
-//#define ICACHE_FLASH_ATTR
+void sntp_set_system_time (uint32_t t);
 
-//#define LWIP_PROVIDE_ERRNO
+#ifdef __cplusplus
+}
+#endif
+#endif // defined(LWIP_BUILD)
 
-#if (1)
-#define BYTE_ORDER LITTLE_ENDIAN
-#else
-#define BYTE_ORDER BIG_ENDIAN
+#include "mem.h" // useful for os_malloc used in esp-arduino's mDNS
+
+typedef uint32_t sys_prot_t;	// not really used
+#define SYS_ARCH_DECL_PROTECT(lev)
+#define SYS_ARCH_PROTECT(lev) os_intr_lock()
+#define SYS_ARCH_UNPROTECT(lev) os_intr_unlock()
+
+///////////////////////////////
+//// DEBUG
+#include "gluedebug.h"
+
+#if ULWIPDEBUG // debug 1:on or 0
+#define LWIP_DEBUG 1
+#define LWIP_PLATFORM_DIAG(x) do { os_printf x; } while(0)
+#define LWIP_PLATFORM_ASSERT(x) 	do { os_printf("Assertion \"%s\" failed at line %d in %s\n", x, __LINE__, __FILE__); *(int*)0=0; } while(0)
+//#define LWIP_PLATFORM_ASSERT(x) 	do { os_printf("Assertion \"%s\" failed at line %d in %s\n", x, __LINE__, __FILE__); while(1); } while(0)
+#endif // ULWIPDEBUG
+
+#if !ULWIPASSERT
+#define LWIP_NOASSERT 1
 #endif
 
+///////////////////////////////
+//// MISSING 
 
-typedef unsigned   char    u8_t;
-typedef signed     char    s8_t;
-typedef unsigned   short   u16_t;
-typedef signed     short   s16_t;
-typedef unsigned   long    u32_t;
-typedef signed     long    s32_t;
-typedef unsigned long   mem_ptr_t;
+#define sys_now millis		// arduino wire millis() definition returns 32 bits like sys_now() does
+#define LWIP_RAND r_rand	// old lwip uses this useful undocumented function
+#define IPSTR "%d.%d.%d.%d"
+#define IP2STR(ipaddr) ip4_addr1_16(ipaddr), \
+    ip4_addr2_16(ipaddr), \
+    ip4_addr3_16(ipaddr), \
+    ip4_addr4_16(ipaddr)
 
-#define S16_F "d"
-#define U16_F "u"
-#define X16_F "x"
+// ip_addr / ip_info: do not exist in lwip2 (only in lwip1.4)
+struct ip_addr {
+  uint32_t addr;
+};
+struct ip_info {
+    struct ip_addr ip;
+    struct ip_addr netmask;
+    struct ip_addr gw;
+};
 
-#ifdef ESP8266
+///////////////////////////////
+//// PROVIDED TO USER
 
-#define S32_F "ld"
-#define U32_F "lu"
-#define X32_F "lx"
+typedef struct ip4_addr ip4_addr_t;
+extern int ntp_servers_number;
+extern ip4_addr_t* ntp_servers;
 
-#else
+///////////////////////////////
+//// STUBS
 
-#define S32_F "d"
-#define U32_F "u"
-#define X32_F "x"
+// these symbols must be renamed in the new implementation
+// because they are known/used in blobs
 
+#define dhcp_cleanup dhcp_cleanup_LWIP2
+#define dhcp_release dhcp_release_LWIP2
+#define dhcp_start dhcp_start_LWIP2
+#define dhcp_stop dhcp_stop_LWIP2
+#define dhcps_start dhcps_start_LWIP2
+//#define dhcps_stop dhcps_stop_LWIP2				// void(void)
+#define espconn_init espconn_init_LWIP2
+#define etharp_output etharp_output_LWIP2
+#define ethbroadcast ethbroadcast_LWIP2
+#define ethernet_input ethernet_input_LWIP2
+#define lwip_init lwip_init_LWIP2
+#define netif_add netif_add_LWIP2
+#define netif_default netif_default_LWIP2
+#define netif_remove netif_remove_LWIP2
+#define netif_set_addr netif_set_addr_LWIP2
+#define netif_set_default netif_set_default_LWIP2
+#define netif_set_down netif_set_down_LWIP2
+#define netif_set_up netif_set_up_LWIP2
+#define pbuf_alloc pbuf_alloc_LWIP2
+#define pbuf_free pbuf_free_LWIP2
+#define pbuf_ref pbuf_ref_LWIP2
+//#define sys_check_timeouts sys_check_timeouts_LWIP2		// void(void)
+
+#if !defined(LWIP_DEBUG) || !SYS_DEBUG
+#define sys_timeout sys_timeout_LWIP2
 #endif
 
+#define sys_untimeout sys_untimeout_LWIP2
 
-//#define PACK_STRUCT_FIELD(x) x __attribute__((packed))
-#define PACK_STRUCT_FIELD(x) x
-#define PACK_STRUCT_STRUCT __attribute__((packed))
-#define PACK_STRUCT_BEGIN
-#define PACK_STRUCT_END
-
-#if 1	//dc42 improved debug messages
-
-#define LWIP_PLATFORM_DIAG(_x) ets_printf _x
-#define LWIP_PLATFORM_ASSERT_NEW(_file, _line, _msg) ets_printf("lwip: %s(%d) %s\n", _file, _line, _msg)
-
-#else
-
-#define LWIP_DEBUG
-
-#ifdef LWIP_DEBUG
-#include <assert.h>
-#define LWIP_PLATFORM_DIAG(x) os_printf x
-#define LWIP_PLATFORM_ASSERT assert
-#else
-#define LWIP_PLATFORM_DIAG(x)
-#define LWIP_PLATFORM_ASSERT(x)
-#endif
-
-#endif	//dc42
-
-#define SYS_ARCH_DECL_PROTECT(x)
-#define SYS_ARCH_PROTECT(x)
-#define SYS_ARCH_UNPROTECT(x)
-
-#define LWIP_PLATFORM_BYTESWAP 1
-#define LWIP_PLATFORM_HTONS(_n)  ((u16_t)((((_n) & 0xff) << 8) | (((_n) >> 8) & 0xff)))
-#define LWIP_PLATFORM_HTONL(_n)  ((u32_t)( (((_n) & 0xff) << 24) | (((_n) & 0xff00) << 8) | (((_n) >> 8)  & 0xff00) | (((_n) >> 24) & 0xff) ))
-
-#if LWIP_RAW
-extern u8_t memp_memory_RAW_PCB_base[];
-#endif /* LWIP_RAW */
-
-#if LWIP_UDP
-extern u8_t memp_memory_UDP_PCB_base[];
-#endif /* LWIP_UDP */
-
-#if LWIP_TCP
-extern u8_t memp_memory_TCP_PCB_base[];
-extern u8_t memp_memory_TCP_PCB_LISTEN_base[];
-extern u8_t memp_memory_TCP_SEG_base[] SHMEM_ATTR;
-#endif /* LWIP_TCP */
-
-#if (!NO_SYS || (NO_SYS && !NO_SYS_NO_TIMERS)) /* LWIP_TIMERS */
-extern u8_t memp_memory_SYS_TIMEOUT_base[];
-#endif /* LWIP_TIMERS */
-
-extern u8_t memp_memory_PBUF_base[];
-extern u8_t memp_memory_PBUF_POOL_base[];
-
-
-
-#endif /* __ARCH_CC_H__ */
+///////////////////////////////
+#endif // LWIP2_ARCH_CC_H
