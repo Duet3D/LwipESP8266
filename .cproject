@@ -69,7 +69,7 @@
 							<option id="cdt.managedbuild.option.gnu.cross.prefix.1988036056.1119052118" name="Prefix" superClass="cdt.managedbuild.option.gnu.cross.prefix.1988036056"/>
 							<option id="cdt.managedbuild.option.gnu.cross.path.34897824.1824996921" name="Path" superClass="cdt.managedbuild.option.gnu.cross.path.34897824"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
-							<tool command="gcc" id="cdt.managedbuild.tool.gnu.cross.c.compiler.643305177" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler.1506750624">
+							<tool command="xtensa-lx106-elf-gcc" id="cdt.managedbuild.tool.gnu.cross.c.compiler.643305177" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler.1506750624">
 								<option id="gnu.c.compiler.option.include.paths.293514226" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/src/glue}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/src/lwip/include}&quot;"/>
