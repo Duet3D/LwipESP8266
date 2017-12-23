@@ -73,7 +73,9 @@ typedef uint32_t sys_prot_t;	// not really used
 //#define LWIP_PLATFORM_ASSERT(x) 	do { os_printf("Assertion \"%s\" failed at line %d in %s\n", x, __LINE__, __FILE__); while(1); } while(0)
 #endif // ULWIPDEBUG
 
-#if !ULWIPASSERT
+#if ULWIPASSERT
+#define LWIP_PLATFORM_ASSERT_NEW(_file, _line, _msg) ets_printf("lwip: %s(%d) %s\n", _file, _line, _msg)		// dc42
+#else
 #define LWIP_NOASSERT 1
 #endif
 

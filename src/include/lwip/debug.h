@@ -112,6 +112,15 @@
  * @}
  */
 
+#if 1	//dc42 debugging improvements
+
+#define LWIP_ASSERT(message, assertion) do { if(!(assertion)) { \
+  LWIP_PLATFORM_ASSERT_NEW(__FILE__, __LINE__, message); } } while(0)
+#define LWIP_ERROR(message, expression, handler) do { if (!(expression)) { \
+  LWIP_PLATFORM_ASSERT_NEW(__FILE__, __LINE__, message); handler;}} while(0)
+
+#else
+
 #ifndef LWIP_NOASSERT
 #define LWIP_ASSERT(message, assertion) do { if (!(assertion)) { \
   LWIP_PLATFORM_ASSERT(message); }} while(0)
@@ -135,6 +144,8 @@
 #define LWIP_ERROR(message, expression, handler) do { if (!(expression)) { \
   LWIP_PLATFORM_ERROR(message); handler;}} while(0)
 #endif /* LWIP_ERROR */
+
+#endif	// dc42
 
 /** Enable debug message printing, but only if debug message type is enabled
  *  AND is of correct type AND is at least LWIP_DBG_LEVEL.
