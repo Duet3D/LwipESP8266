@@ -1920,7 +1920,15 @@ mdns_resp_remove_netif(struct netif *netif)
 
   LWIP_ASSERT("mdns_resp_remove_netif: Null pointer", netif);
   mdns = NETIF_TO_HOST(netif);
+#if 1	//dc42
+  // To avoid the caller having to track which netifs it has enabled MDNS on, don't give an error if we call this more than one
+  if (mdns == NULL)
+  {
+	  return ERR_OK;
+  }
+#else
   LWIP_ERROR("mdns_resp_remove_netif: Not an active netif", (mdns != NULL), return ERR_VAL);
+#endif
 
   for (i = 0; i < MDNS_MAX_SERVICES; i++) {
     struct mdns_service *service = mdns->services[i];
