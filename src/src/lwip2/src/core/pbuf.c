@@ -360,6 +360,7 @@ pbuf_alloc(pbuf_layer layer, u16_t length, pbuf_type type)
     
       /* If pbuf is to be allocated in RAM, allocate memory for it. */
       p = (struct pbuf*)mem_malloc(alloc_len);
+//if (p == NULL) { ets_printf("Fail alloc %u\n", alloc_len); }	//***DC debug
     }
 
     if (p == NULL) {

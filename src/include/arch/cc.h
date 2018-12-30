@@ -77,6 +77,7 @@ typedef uint32_t sys_prot_t;	// not really used
 #define LWIP_PLATFORM_ASSERT_NEW(_file, _line, _msg) ets_printf("lwip: %s(%d) %s\n", _file, _line, _msg)		// dc42
 #else
 #define LWIP_NOASSERT 1
+#define LWIP_PLATFORM_ASSERT_NEW(_file, _line, _msg)
 #endif
 
 ///////////////////////////////

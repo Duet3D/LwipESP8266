@@ -178,6 +178,7 @@ tcp_create_segment(struct tcp_pcb *pcb, struct pbuf *p, u8_t flags, u32_t seqno,
   if ((seg = (struct tcp_seg *)memp_malloc(MEMP_TCP_SEG)) == NULL) {
     LWIP_DEBUGF(TCP_OUTPUT_DEBUG | LWIP_DBG_LEVEL_SERIOUS, ("tcp_create_segment: no memory.\n"));
     pbuf_free(p);
+//ets_printf("fail 181\n");
     return NULL;
   }
   seg->flags = optflags;
@@ -201,6 +202,7 @@ tcp_create_segment(struct tcp_pcb *pcb, struct pbuf *p, u8_t flags, u32_t seqno,
     LWIP_DEBUGF(TCP_OUTPUT_DEBUG | LWIP_DBG_LEVEL_SERIOUS, ("tcp_create_segment: no room for TCP header in pbuf.\n"));
     TCP_STATS_INC(tcp.err);
     tcp_seg_free(seg);
+//ets_printf("fail 205\n");
     return NULL;
   }
   seg->tcphdr = (struct tcp_hdr *)seg->p->payload;
@@ -403,6 +405,7 @@ tcp_write(struct tcp_pcb *pcb, const void *arg, u16_t len, u8_t apiflags)
 
   err = tcp_write_checks(pcb, len);
   if (err != ERR_OK) {
+//ets_printf("write checks failed\n");	//*****DC debug
     return err;
   }
   queuelen = pcb->snd_queuelen;
@@ -505,6 +508,7 @@ tcp_write(struct tcp_pcb *pcb, const void *arg, u16_t len, u8_t apiflags)
           LWIP_DEBUGF(TCP_OUTPUT_DEBUG | LWIP_DBG_LEVEL_SERIOUS,
                       ("tcp_write : could not allocate memory for pbuf copy size %"U16_F"\n",
                        seglen));
+//ets_printf("pbuf alloc failed 509\n");	//*****DC debug
           goto memerr;
         }
 #if TCP_OVERSIZE_DBGCHECK
@@ -527,7 +531,8 @@ tcp_write(struct tcp_pcb *pcb, const void *arg, u16_t len, u8_t apiflags)
           if ((concat_p = pbuf_alloc(PBUF_RAW, seglen, PBUF_ROM)) == NULL) {
             LWIP_DEBUGF(TCP_OUTPUT_DEBUG | LWIP_DBG_LEVEL_SERIOUS,
                         ("tcp_write: could not allocate memory for zero-copy pbuf\n"));
-            goto memerr;
+//ets_printf("pbuf alloc failed 522\n");	//*****DC debug
+           goto memerr;
           }
           /* reference the non-volatile payload data */
           ((struct pbuf_rom*)concat_p)->payload = (const u8_t*)arg + pos;
@@ -571,6 +576,7 @@ tcp_write(struct tcp_pcb *pcb, const void *arg, u16_t len, u8_t apiflags)
        * into pbuf */
       if ((p = tcp_pbuf_prealloc(PBUF_TRANSPORT, seglen + optlen, mss_local, &oversize, pcb, apiflags, queue == NULL)) == NULL) {
         LWIP_DEBUGF(TCP_OUTPUT_DEBUG | LWIP_DBG_LEVEL_SERIOUS, ("tcp_write : could not allocate memory for pbuf copy size %"U16_F"\n", seglen));
+//ets_printf("pbuf alloc failed 577 len %u\n", seglen + optlen);	//*****DC debug
         goto memerr;
       }
       LWIP_ASSERT("tcp_write: check that first pbuf can hold the complete seglen",
@@ -588,6 +594,7 @@ tcp_write(struct tcp_pcb *pcb, const void *arg, u16_t len, u8_t apiflags)
 #endif /* TCP_OVERSIZE */
       if ((p2 = pbuf_alloc(PBUF_TRANSPORT, seglen, PBUF_ROM)) == NULL) {
         LWIP_DEBUGF(TCP_OUTPUT_DEBUG | LWIP_DBG_LEVEL_SERIOUS, ("tcp_write: could not allocate memory for zero-copy pbuf\n"));
+//ets_printf("pbuf alloc failed 595\n");	//*****DC debug
         goto memerr;
       }
 #if TCP_CHECKSUM_ON_COPY
@@ -607,6 +614,7 @@ tcp_write(struct tcp_pcb *pcb, const void *arg, u16_t len, u8_t apiflags)
          * well. */
         pbuf_free(p2);
         LWIP_DEBUGF(TCP_OUTPUT_DEBUG | LWIP_DBG_LEVEL_SERIOUS, ("tcp_write: could not allocate memory for header pbuf\n"));
+//ets_printf("pbuf alloc failed 5615\n");	//*****DC debug
         goto memerr;
       }
       /* Concatenate the headers and data pbufs together. */
@@ -622,10 +630,12 @@ tcp_write(struct tcp_pcb *pcb, const void *arg, u16_t len, u8_t apiflags)
       LWIP_DEBUGF(TCP_OUTPUT_DEBUG | LWIP_DBG_LEVEL_SERIOUS, ("tcp_write: queue too long %"U16_F" (%d)\n",
         queuelen, (int)TCP_SND_QUEUELEN));
       pbuf_free(p);
+//ets_printf("pbuf alloc failed 631\n");	//*****DC debug
       goto memerr;
     }
 
     if ((seg = tcp_create_segment(pcb, p, 0, pcb->snd_lbb + pos, optflags)) == NULL) {
+//ets_printf("tcp_cs failed 636\n");		//*****DC debug
       goto memerr;
     }
 #if TCP_OVERSIZE_DBGCHECK

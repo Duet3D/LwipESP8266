@@ -52,6 +52,13 @@
  * without this, doxygen does not see the actual #define
  */
 
+// DC42: if we enable all stats then the buffer overflows when sending them to the SAM. So we disable some of them.
+#define LINK_STATS                      0
+#define ETHARP_STATS                    0
+#define IGMP_STATS                      0
+#define ICMP_STATS                      0
+#define UDP_STATS                       0
+
 /*
  * Include user defined options first. Anything not defined in these files
  * will be set to standard values. Override anything you don't like!
@@ -405,7 +412,7 @@
  * (requires the LWIP_TCP option)
  */
 #if !defined MEMP_NUM_TCP_SEG || defined __DOXYGEN__
-#define MEMP_NUM_TCP_SEG                10 // 5
+#define MEMP_NUM_TCP_SEG                16 // note, 10 is too low for DuetWiFiSocketServer
 #endif
 
 /**
