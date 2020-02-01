@@ -47,5 +47,8 @@ Temporary Items
 .apdisk
 
 # Output folders
-./Debug/
-./Release/
+/Debug/
+/Release/
+
+# Misc
+.settings/language.settings.xml
