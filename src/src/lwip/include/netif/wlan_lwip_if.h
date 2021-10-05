@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2010-2011 	Espressif System
- *   
+ *
 */
 
 #ifndef _WLAN_LWIP_IF_H_
@@ -10,8 +10,13 @@
 #define LWIP_IF1_PRIO   29
 
 enum {
-	SIG_LWIP_RX = 0, 
+	SIG_LWIP_RX = 0,
 };
+
+#if 1	//dc avoid compiler warnings
+struct ieee80211_conn;
+struct ip_info;
+#endif
 
 struct netif * eagle_lwip_if_alloc(struct ieee80211_conn *conn, const uint8 *macaddr, struct ip_info *info);
 struct netif * eagle_lwip_getif(uint8 index);

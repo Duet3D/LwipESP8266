@@ -1,26 +1,26 @@
 
 /*
 
-Redistribution and use in source and binary forms, with or without modification, 
-are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
 
-1. Redistributions of source code must retain the above copyright notice, 
-this list of conditions and the following disclaimer. 
-2. Redistributions in binary form must reproduce the above copyright notice, 
-this list of conditions and the following disclaimer in the documentation 
-and/or other materials provided with the distribution. 
-3. The name of the author may not be used to endorse or promote products 
-derived from this software without specific prior written permission. 
+1. Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation
+and/or other materials provided with the distribution.
+3. The name of the author may not be used to endorse or promote products
+derived from this software without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS AND ANY EXPRESS OR IMPLIED 
-WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
-MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT 
-SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT 
-OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING 
-IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE.
 
 author: d. gauchard
@@ -41,6 +41,10 @@ author: d. gauchard
 #include "lwip/pbuf.h"
 #include "netif/etharp.h"
 #include "lwip/mem.h"
+
+#if 1 //dc
+# include "netif/wlan_lwip_if.h"		// for function eagle_lwip_getif
+#endif
 
 #define DBG	"lwESP: "
 #define STUB(x) do { uerror("STUB: " #x "\n"); } while (0)
@@ -271,7 +275,7 @@ err_glue_t glue2esp_linkoutput (int netif_idx, void* ref2save, void* data, size_
 	uassert(p->pbuf.flags == 0);
 	uassert(p->pbuf.next == NULL);
 	uassert(p->pbuf.eb == NULL);
-	
+
 	p->pbuf.payload = data;
 	p->pbuf.len = p->pbuf.tot_len = size;
 	p->pbuf.ref = 0;
@@ -282,7 +286,7 @@ err_glue_t glue2esp_linkoutput (int netif_idx, void* ref2save, void* data, size_
 		&p->pbuf,
 		ref2save,
 		netif_idx);
-	
+
 	// call blobs
 	// blobs will call pbuf_free() back later
 	// we will retrieve our ref2save and give it back to glue
@@ -312,14 +316,14 @@ err_t etharp_output (struct netif* netif, struct pbuf* q, ip_addr_t* ipaddr)
 	uerror("ERROR: STUB etharp_output should not be called\n");
 	return ERR_ABRT;
 }
-                   
+
 err_t ethernet_input (struct pbuf* p, struct netif* netif)
 {
 	uprint(DBG "received pbuf@%p (pbuf: %dB ref=%d eb=%p) on netif ", p, p->tot_len, p->ref, p->eb);
 	stub_display_netif(netif);
-	
+
 	uassert(p->tot_len == p->len && p->ref == 1);
-	
+
 #if UDUMP
 	// dump packets for me (direct or broadcast)
 	if (   memcmp((const char*)p->payload, netif->hwaddr, 6) == 0
@@ -358,7 +362,7 @@ void dhcps_start (struct ip_info* info)
 	uprint(DBG "dhcps_start ");
 	display_ip_info(info);
 	uprint("\n");
-	
+
 	if (netif_ap)
 		///XXX this is mandatory for blobs to be happy
 		// but we should get this info back through glue
@@ -424,13 +428,13 @@ static int netif_is_new (struct netif* netif)
 		uprint(DBG "netif (%d): already added\n", netif->num);
 		return 0; // not new
 	}
-	
+
 	uprint(DBG "NEW netif\n");
 	stub_display_netif(netif);
 
 	netif->next = netif->num == STATION_IF? test_netif_ap: NULL;
 	netif_esp[netif->num] = netif;
-	
+
 	return 1; // is new
 }
 
@@ -444,7 +448,7 @@ struct netif* netif_add (
 	netif_input_fn packet_incoming)
 {
 	uprint(DBG "netif_add\n");
-	
+
 	//////////////////////////////
 	// this is revisited ESP lwip implementation
 	netif->ip_addr.addr = 0;
@@ -512,7 +516,7 @@ void netif_remove (struct netif* netif)
 	(void)netif;
 	uprint(DBG "trying to remove netif ");
 	stub_display_netif(netif);
-	
+
 	// don't, see netif_set_down()
 	//esp2glue_netif_set_updown(netif->num, 0);
 	//netif->flags &= ~NETIF_FLAG_LINK_UP;
@@ -520,7 +524,7 @@ void netif_remove (struct netif* netif)
 }
 
 static err_t voidinit (struct netif* netif)
-{	
+{
 	(void)netif;
 	return ERR_OK;
 }
@@ -555,7 +559,7 @@ void netif_set_addr (struct netif* netif, ip_addr_t* ipaddr, ip_addr_t* netmask,
 	}
 
 	stub_display_netif(netif);
-	
+
 	esp2glue_netif_update(netif->num, ipaddr->addr, netmask->addr, gw->addr, netif->hwaddr_len, netif->hwaddr, netif->mtu);
 }
 
@@ -570,14 +574,14 @@ void netif_set_down (struct netif* netif)
 {
 	uprint(DBG "netif_set_down  ");
 	stub_display_netif(netif);
-	
+
 	// dont set down. some esp8266 will:
 	// * esp2glue_netif_set_down(sta)
 	// * restart dhcp-client _without_ netif_set_up.
 	// or:
 	// * esp2glue_netif_set_down(ap)
 	// * restart dhcp-server _without_ netif_set_up.
-	
+
 	// netif->flags &= ~(NETIF_FLAG_UP |  NETIF_FLAG_LINK_UP);
 	// esp2glue_netif_set_updown(netif->num, 0);
 	(void)netif;
@@ -599,12 +603,12 @@ struct pbuf* pbuf_alloc (pbuf_layer layer, u16_t length, pbuf_type type)
 
 	//STUB(pbuf_alloc);
 	//pbuf_info("pbuf_alloc", layer, length, type);
-	
+
 	u16_t offset = 0;
 	if (layer == PBUF_RAW && type == PBUF_RAM)
 	{
 		offset += EP_OFFSET;
-		
+
 		/* If pbuf is to be allocated in RAM, allocate memory for it. */
 		size_t alloclen = LWIP_MEM_ALIGN_SIZE(SIZEOF_STRUCT_PBUF + offset) + LWIP_MEM_ALIGN_SIZE(length);
 		struct pbuf* p = (struct pbuf*)mem_malloc(alloclen);
@@ -621,7 +625,7 @@ struct pbuf* pbuf_alloc (pbuf_layer layer, u16_t length, pbuf_type type)
 		uprint(DBG "pbuf_alloc(RAW/RAM)-> %p %dB type=%d\n", p, alloclen, type);
 		return p;
 	}
-	
+
 	if (layer == PBUF_RAW && type == PBUF_REF)
 	{
 		//unused: offset += EP_OFFSET;
@@ -641,7 +645,7 @@ struct pbuf* pbuf_alloc (pbuf_layer layer, u16_t length, pbuf_type type)
 	}
 
 	uerror(DBG "pbuf_alloc BAD CASE\n");
-		
+
 	return NULL;
 }
 
@@ -651,11 +655,11 @@ u8_t pbuf_free (struct pbuf *p)
 	uprint(DBG "pbuf_free(%p) ref=%d type=%d\n", p, p->ref, p->type);
 	//pbuf_info("pbuf_free", -1, p->len, p->type);
 	//uprint("pbuf@%p ref=%d tot_len=%d eb=%p\n", p, p->ref, p->tot_len, p->eb);
-	
+
 	#if LWIP_SUPPORT_CUSTOM_PBUF
 	#error LWIP_SUPPORT_CUSTOM_PBUF is defined
 	#endif
-	
+
 	uassert(p->ref == 1);
 
 	if (p->type == PBUF_CUSTOM_TYPE_POOLED)
@@ -669,10 +673,10 @@ u8_t pbuf_free (struct pbuf *p)
 		uassert(pw->ref2save);
 		esp2glue_pbuf_freed(pw->ref2save);
 		pbuf_wrapper_release(pw);
-			
+
 		return 1;
 	}
-		
+
 	if (   !p->next
 	    && p->ref == 1
 	    && (p->type == PBUF_RAM || p->type == PBUF_REF)
@@ -716,7 +720,7 @@ void glue2esp_ifup (int netif_idx, uint32_t ip, uint32_t mask, uint32_t gw)
 	oldip = netif->ip_addr;
 	oldmask = netif->netmask;
 	oldgw = netif->gw;
-	        
+
 	// change ips
 	netif->ip_addr.addr = ip;
 	netif->netmask.addr = mask;
