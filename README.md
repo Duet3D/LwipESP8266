@@ -1,6 +1,6 @@
 # LwipESP8266
 
-LWIP TCP/IP library for ESP8266 on Duet WiFi
+LWIP TCP/IP library for ESP8266 on Duet 2 WiFi and Duet 3 Mini 5+ WiFi
 
 ## Bug reports
 
