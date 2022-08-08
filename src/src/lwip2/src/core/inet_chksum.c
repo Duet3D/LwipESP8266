@@ -8,7 +8,7 @@
  * your own version, link it in and in your cc.h put:
  *
  * \#define LWIP_CHKSUM your_checksum_routine
- * 
+ *
  * Or you can select from the implementations below by defining
  * LWIP_CHKSUM_ALGORITHM to 1, 2 or 3.
  */
@@ -76,7 +76,7 @@ u16_t lwip_standard_chksum(const void *dataptr, int len);
  * @note accumulator size limits summable length to 64k
  * @note host endianess is irrelevant (p3 RFC1071)
  */
-u16_t
+u16_t __attribute__((section(".iram.text")))
 lwip_standard_chksum(const void *dataptr, int len)
 {
   u32_t acc;
@@ -129,7 +129,7 @@ lwip_standard_chksum(const void *dataptr, int len)
  * @param len length of data to be summed
  * @return host order (!) lwip checksum (non-inverted Internet sum)
  */
-u16_t
+u16_t __attribute__((section(".iram.text")))
 lwip_standard_chksum(const void *dataptr, int len)
 {
   const u8_t *pb = (const u8_t *)dataptr;
@@ -185,7 +185,7 @@ lwip_standard_chksum(const void *dataptr, int len)
  *
  * by Curt McDowell, Broadcom Corp. December 8th, 2005
  */
-u16_t
+u16_t __attribute__((section(".iram.text")))
 lwip_standard_chksum(const void *dataptr, int len)
 {
   const u8_t *pb = (const u8_t *)dataptr;

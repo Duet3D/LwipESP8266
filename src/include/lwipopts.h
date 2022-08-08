@@ -1474,7 +1474,7 @@
 #endif
 
 /**
- * LWIP_NETIF_EXT_STATUS_CALLBACK==1: Support an extended callback function 
+ * LWIP_NETIF_EXT_STATUS_CALLBACK==1: Support an extended callback function
  * for several netif related event that supports multiple subscribers.
  * @see netif_ext_status_callback
  */
@@ -1519,7 +1519,7 @@
  * @todo: TCP and IP-frag do not work with this, yet:
  */
 #if !defined LWIP_NETIF_TX_SINGLE_PBUF || defined __DOXYGEN__
-#define LWIP_NETIF_TX_SINGLE_PBUF             1 // MANDATORY FOR ESP8266 BLOBS !! 
+#define LWIP_NETIF_TX_SINGLE_PBUF             1 // MANDATORY FOR ESP8266 BLOBS !!
 #endif /* LWIP_NETIF_TX_SINGLE_PBUF */
 
 /**
@@ -2129,6 +2129,9 @@
  * @ingroup lwip_opts_infrastructure
  * @{
  */
+
+#define LWIP_CHKSUM_ALGORITHM	2		// algorithm 3 doesn't seem to be any faster
+
 /**
  * LWIP_CHECKSUM_CTRL_PER_NETIF==1: Checksum generation/check can be enabled/disabled
  * per netif.
@@ -2677,8 +2680,8 @@
  * - src: source eth address
  * - dst: destination eth address
  * - eth_type: ethernet type to packet to be sent\n
- * 
- * 
+ *
+ *
  * Return values:
  * - &lt;0: Packet shall not contain VLAN header.
  * - 0 &lt;= return value &lt;= 0xFFFF: Packet shall contain VLAN header. Return value is prio_vid in host byte order.
